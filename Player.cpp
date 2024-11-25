@@ -1,10 +1,10 @@
 #include "Player.h"
 
-
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
+    playerPos = objPos(9, 4, '*');
 
     // more actions to be included
 }
@@ -12,17 +12,17 @@ Player::Player(GameMechs* thisGMRef)
 
 Player::~Player()
 {
-    // delete any heap members here
 }
 
 objPos Player::getPlayerPos() const
 {
-    // return the reference to the playerPos arrray list
+    return playerPos.getObjPos();
+    // return the reference to the playerPos array list (getHeadElement)
 }
 
 void Player::updatePlayerDir()
 {
-        // PPA3 input processing logic          
+    
 }
 
 void Player::movePlayer()
@@ -30,4 +30,4 @@ void Player::movePlayer()
     // PPA3 Finite State Machine logic
 }
 
-// More methods to be added
+enum dir {UP, DOWN, LEFT, RIGHT, STOP};
