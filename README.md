@@ -12,6 +12,6 @@ Member 1 MacID: wonge84
 Member 1 StudentID: 400507980
 Member 1 Lab Section: L04
 
-Member 2 MacID: [Insert your macID here]
-Member 2 StudentID: [Insert your numerical student ID here]
-Member 2 Lab Section: [Insert your lab section here]
+Member 2 MacID: sifarf
+Member 2 StudentID: 400515680
+Member 2 Lab Section: L03
