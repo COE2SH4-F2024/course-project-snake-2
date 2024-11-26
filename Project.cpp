@@ -45,7 +45,6 @@ void Initialize(void)
 
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
-    DrawScreen();
 }
 
 void GetInput(void)
