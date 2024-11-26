@@ -1,13 +1,10 @@
 #include "Player.h"
-#include <iostream>
-
-using namespace std;
 
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    playerPos = objPos(9, 4, '*');
+    playerPos = objPos(15, 7, '*');
 
     // more actions to be included
 }
@@ -27,6 +24,7 @@ void Player::updatePlayerDir()
 {
     char input = mainGameMechsRef -> getInput();
 
+    // Allows 90° turns, but not 180°
     if (input)
     {
         switch(input)
@@ -63,11 +61,13 @@ void Player::updatePlayerDir()
 
 void Player::movePlayer()
 {
+    // Shortcuts
     int xMax = mainGameMechsRef -> getBoardSizeX();
     int yMax = mainGameMechsRef -> getBoardSizeY();
     int playerX = playerPos.pos -> x;
     int playerY = playerPos.pos -> y;
     
+    // Movement implements wrap-around logic
     switch(myDir)
     {
         case UP:

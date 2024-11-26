@@ -49,7 +49,7 @@ void Initialize(void)
 
 void GetInput(void)
 {
-    if (MacUILib_hasChar())
+    if (MacUILib_hasChar()) // Allows for asynchronous logic
     {
         input = MacUILib_getChar();
         gamemechs -> setInput(input);
@@ -74,7 +74,7 @@ void RunLogic(void)
                 gamemechs -> setLoseFlag();
                 gamemechs -> setExitTrue();
                 break;
-            default:
+            default: // Only attempts to update player movement if exit key is not pressed
                 player -> updatePlayerDir();
                 break;
         }
@@ -89,6 +89,7 @@ void DrawScreen(void)
 {
     MacUILib_clearScreen();
 
+    // Shortcuts
     int columns = gamemechs -> getBoardSizeY();
     int rows = gamemechs -> getBoardSizeX();
     int playerX = player -> getPlayerPos().pos->x;
