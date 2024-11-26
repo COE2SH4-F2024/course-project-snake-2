@@ -9,7 +9,6 @@ using namespace std;
 #define row 10
 #define size 20
 
-bool exitFlag;
 objPos board;
 GameMechs* gamemechs = nullptr;
 Player* player = nullptr;
@@ -44,7 +43,6 @@ void Initialize(void)
 
     board = objPos();
 
-    exitFlag = false;
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
 }
@@ -58,21 +56,28 @@ void GetInput(void)
 void RunLogic(void)
 {
     char input = gamemechs -> getInput();
-    if (input == 27)
+
+    if(input != 0)
     {
-        gamemechs -> setExitTrue();
+        switch(input)
+        {
+            case 27:
+                gamemechs -> setExitTrue();
+                break;
+            case 'x':
+                gamemechs -> incrementScore();
+                break;
+            case 'z':
+                gamemechs -> setLoseFlag();
+                gamemechs -> setExitTrue();
+                break;
+            default:
+                player->updatePlayerDir();
+                break;
+        }
     }
-    else if (input == 'x')
-    {
-        gamemechs -> incrementScore();
-        MacUILib_printf("the score is %d\n", gamemechs -> getScore());
-    }
-    else if (input == 'z')
-    {
-        gamemechs -> setLoseFlag();
-        MacUILib_printf("exiting the game");
-        gamemechs -> setExitTrue();
-    }
+
+    
     
     gamemechs -> clearInput();
 }
