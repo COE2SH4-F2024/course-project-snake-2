@@ -6,12 +6,11 @@
 using namespace std;
 
 #define DELAY_CONST 100000
-#define row 10
-#define size 20
 
 objPos board;
 GameMechs* gamemechs = nullptr;
 Player* player = nullptr;
+char input;
 
 void Initialize(void);
 void GetInput(void);
@@ -42,20 +41,22 @@ void Initialize(void)
     MacUILib_clearScreen();
 
     board = objPos();
-
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
 }
 
 void GetInput(void)
 {
-    char input = MacUILib_getChar();
-    gamemechs -> setInput(input);
+    if (MacUILib_hasChar())
+    {
+        input = MacUILib_getChar();
+        gamemechs -> setInput(input);
+    }
 }
 
 void RunLogic(void)
 {
-    char input = gamemechs -> getInput();
+    input = gamemechs -> getInput();
 
     if(input != 0)
     {
@@ -72,32 +73,40 @@ void RunLogic(void)
                 gamemechs -> setExitTrue();
                 break;
             default:
-                player->updatePlayerDir();
+                player -> updatePlayerDir();
                 break;
         }
     }
     
     gamemechs -> clearInput();
+
+    player -> movePlayer();
 }
 
 void DrawScreen(void)
 {
     MacUILib_clearScreen();
 
-    for (int i = 0; i < row; i++)
+    int columns = gamemechs -> getBoardSizeY();
+    int rows = gamemechs -> getBoardSizeX();
+    int playerX = player -> getPlayerPos().pos->x;
+    int playerY = player -> getPlayerPos().pos->y;
+    int playerSym = player -> getPlayerPos().symbol;
+
+    for (int i = 0; i < columns; i++)
     {
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < rows; j++)
         {
-            if ((i == 0) || (i == 9))
+            if ((i == 0) || (i == (columns - 1)))
                 board.setObjPos(j, i, '#');
-            else if ((j == 0) || (j == 19))
+            else if ((j == 0) || (j == (rows - 1)))
                 board.setObjPos(j, i, '#');
-            else if ((i == player->getPlayerPos().pos->y) && (j == player->getPlayerPos().pos->x))
-                board.setObjPos(j, i, player->getPlayerPos().symbol);
+            else if ((i == playerY) && (j == playerX))
+                board.setObjPos(j, i, playerSym);
             else
                 board.setObjPos(j, i, ' ');
 
-            if (j != 19)
+            if (j != (rows - 1))
                 MacUILib_printf("%c", board.getSymbol());
             else
                 MacUILib_printf("%c\n", board.getSymbol());
