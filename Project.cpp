@@ -45,6 +45,7 @@ void Initialize(void)
 
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
+    DrawScreen();
 }
 
 void GetInput(void)
@@ -76,8 +77,6 @@ void RunLogic(void)
                 break;
         }
     }
-
-    
     
     gamemechs -> clearInput();
 }
@@ -105,6 +104,7 @@ void DrawScreen(void)
                 MacUILib_printf("%c\n", board.getSymbol());
         }
     }
+
 }
 
 void LoopDelay(void)

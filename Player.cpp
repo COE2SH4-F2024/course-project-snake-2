@@ -1,4 +1,7 @@
 #include "Player.h"
+#include <iostream>
+
+using namespace std;
 
 Player::Player(GameMechs* thisGMRef)
 {
@@ -32,24 +35,28 @@ void Player::updatePlayerDir()
                 if (myDir != DOWN)
                 {
                     myDir = UP;
+                    cout << "UP";
                 }
                 break;
             case 's':
                 if (myDir != UP)
                 {
                     myDir = DOWN;
+                    cout << "DOWN";
                 }
                 break;
             case 'd':
                 if (myDir != LEFT)
                 {
                     myDir = RIGHT;
+                    cout << "RIGHT";
                 }
                 break;
             case 'a':
                 if (myDir != RIGHT)
                 {
                     myDir = LEFT;
+                    cout << "LEFT";
                 }
                 break;
             default:
