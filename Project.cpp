@@ -9,11 +9,10 @@ using namespace std;
 #define row 10
 #define size 20
 
-
 bool exitFlag;
-
 objPos board;
-
+GameMechs* gamemechs = nullptr;
+Player* player = nullptr;
 
 void Initialize(void);
 void GetInput(void);
@@ -21,8 +20,6 @@ void RunLogic(void);
 void DrawScreen(void);
 void LoopDelay(void);
 void CleanUp(void);
-
-GameMechs* gamemechs = nullptr;
 
 int main(void)
 {
@@ -49,39 +46,41 @@ void Initialize(void)
 
     exitFlag = false;
     gamemechs = new GameMechs();
+    player = new Player(gamemechs);
 }
 
 void GetInput(void)
 {
     char input = MacUILib_getChar();
-   gamemechs -> setInput(input);
+    gamemechs -> setInput(input);
 }
 
 void RunLogic(void)
 {
     char input = gamemechs -> getInput();
-    if (input == 27){
+    if (input == 27)
+    {
         gamemechs -> setExitTrue();
     }
-    else if (input == 'x'){
+    else if (input == 'x')
+    {
         gamemechs -> incrementScore();
         MacUILib_printf("the score is %d\n", gamemechs -> getScore());
     }
-    else if (input == 'z'){
+    else if (input == 'z')
+    {
         gamemechs -> setLoseFlag();
         MacUILib_printf("exiting the game");
         gamemechs -> setExitTrue();
     }
     
     gamemechs -> clearInput();
-
 }
 
 void DrawScreen(void)
 {
     MacUILib_clearScreen();
 
-    objPos board = objPos();
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < size; j++)
@@ -90,6 +89,8 @@ void DrawScreen(void)
                 board.setObjPos(j, i, '#');
             else if ((j == 0) || (j == 19))
                 board.setObjPos(j, i, '#');
+            else if ((i == player->getPlayerPos().pos->y) && (j == player->getPlayerPos().pos->x))
+                board.setObjPos(j, i, player->getPlayerPos().symbol);
             else
                 board.setObjPos(j, i, ' ');
 
@@ -110,6 +111,9 @@ void LoopDelay(void)
 void CleanUp(void)
 {
     MacUILib_clearScreen();    
+
+    delete player;
+    player = nullptr;
 
     delete gamemechs;
     gamemechs = nullptr;
