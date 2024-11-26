@@ -10,6 +10,7 @@ using namespace std;
 objPos board;
 GameMechs* gamemechs = nullptr;
 Player* player = nullptr;
+char input;
 
 void Initialize(void);
 void GetInput(void);
@@ -42,18 +43,22 @@ void Initialize(void)
     board = objPos();
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
-    //DrawScreen();
+    
+    input = 0;
 }
 
 void GetInput(void)
 {
-    char input = MacUILib_getChar();
-    gamemechs -> setInput(input);
+    if (MacUILib_hasChar())
+    {
+        input = MacUILib_getChar();
+        gamemechs -> setInput(input);
+    }
 }
 
 void RunLogic(void)
 {
-    char input = gamemechs -> getInput();
+    input = gamemechs -> getInput();
 
     if(input != 0)
     {
