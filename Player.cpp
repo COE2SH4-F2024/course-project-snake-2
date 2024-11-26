@@ -35,28 +35,24 @@ void Player::updatePlayerDir()
                 if (myDir != DOWN)
                 {
                     myDir = UP;
-                    cout << "UP";
                 }
                 break;
             case 's':
                 if (myDir != UP)
                 {
                     myDir = DOWN;
-                    cout << "DOWN";
                 }
                 break;
             case 'd':
                 if (myDir != LEFT)
                 {
                     myDir = RIGHT;
-                    cout << "RIGHT";
                 }
                 break;
             case 'a':
                 if (myDir != RIGHT)
                 {
                     myDir = LEFT;
-                    cout << "LEFT";
                 }
                 break;
             default:
@@ -67,7 +63,28 @@ void Player::updatePlayerDir()
 
 void Player::movePlayer()
 {
-    // PPA3 Finite State Machine logic
+    int xMax = mainGameMechsRef -> getBoardSizeX();
+    int yMax = mainGameMechsRef -> getBoardSizeY();
+    int playerX = playerPos.pos -> x;
+    int playerY = playerPos.pos -> y;
+    
+    switch(myDir)
+    {
+        case UP:
+            playerPos.pos -> y = (playerY > 1) ? (playerY - 1) : (yMax - 2);
+            break;
+        case DOWN:
+            playerPos.pos -> y = (playerY < (yMax - 2)) ? (playerY + 1) : 1;
+            break;
+        case LEFT:
+            playerPos.pos -> x = (playerX > 1) ? (playerX - 1) : (xMax - 2);
+            break;
+        case RIGHT:
+            playerPos.pos -> x = (playerX < (xMax - 2)) ? (playerX + 1) : 1;
+            break;
+        default:
+            break;
+    }
 }
 
 enum dir {UP, DOWN, LEFT, RIGHT, STOP};
