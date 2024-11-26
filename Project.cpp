@@ -10,7 +10,6 @@ using namespace std;
 objPos board;
 GameMechs* gamemechs = nullptr;
 Player* player = nullptr;
-char input;
 
 void Initialize(void);
 void GetInput(void);
@@ -34,7 +33,6 @@ int main(void)
     CleanUp();
 }
 
-
 void Initialize(void)
 {
     MacUILib_init();
@@ -43,22 +41,20 @@ void Initialize(void)
     board = objPos();
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
-    
-    input = 0;
 }
 
 void GetInput(void)
 {
     if (MacUILib_hasChar()) // Allows for asynchronous logic
     {
-        input = MacUILib_getChar();
+        char input = MacUILib_getChar();
         gamemechs -> setInput(input);
     }
 }
 
 void RunLogic(void)
 {
-    input = gamemechs -> getInput();
+    char input = gamemechs -> getInput();
 
     if(input != 0)
     {
