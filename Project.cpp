@@ -3,12 +3,15 @@
 #include "objPos.h"
 #include "Player.h"
 #include "GameMechs.h"
+#include "Food.h"
+
 using namespace std;
 
 #define DELAY_CONST 100000
 
 GameMechs* gamemechs = nullptr;
 Player* player = nullptr;
+Food* food = nullptr;
 
 void Initialize(void);
 void GetInput(void);
@@ -39,6 +42,7 @@ void Initialize(void)
 
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
+    food = new Food();
 }
 
 void GetInput(void)
@@ -133,6 +137,9 @@ void CleanUp(void)
 
     delete gamemechs;
     gamemechs = nullptr;
+
+    delete food;
+    food = nullptr;
 
     MacUILib_uninit();
 }
