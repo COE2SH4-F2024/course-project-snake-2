@@ -96,9 +96,10 @@ void DrawScreen(void)
     int rows = gamemechs->getBoardSizeX();
 
     bool snakePart = false;
-    bool foodpart = false;
     char body = '\0';
     objPosArrayList* snake = player->getPlayerPos();
+
+    bool foodpart = false;
     objPos foodPos = food->getFoodPos();
 
     for (int i = 0; i < columns; i++)
@@ -117,8 +118,7 @@ void DrawScreen(void)
                     snakePart = true;
                     body = snakeBody.getSymbol();
                     break;
-                }
-                
+                } 
             }
 
             if (i == 0 || i == (columns - 1) || j == 0 || j == (rows - 1))

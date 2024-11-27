@@ -1,6 +1,7 @@
 #ifndef FOOD_H
 #define FOOD_H
-#include <time.h>
+
+#include <stdlib.h>
 #include "objPos.h"
 
 class Food
