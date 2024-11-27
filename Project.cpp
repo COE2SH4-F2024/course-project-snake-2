@@ -22,7 +22,7 @@ int main(void)
 {
     Initialize();
 
-    while(!gamemechs -> getExitFlagStatus())  
+    while (!gamemechs -> getExitFlagStatus())  
     {
         GetInput();
         RunLogic();
@@ -56,7 +56,7 @@ void RunLogic(void)
 {
     char input = gamemechs -> getInput();
 
-    if(input != 0)
+    if (input != 0)
     {
         switch(input)
         {

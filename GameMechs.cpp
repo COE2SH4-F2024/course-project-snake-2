@@ -20,10 +20,9 @@ GameMechs::GameMechs(int boardX, int boardY)
     boardSizeY = boardY;
 }
 
-// do you need a destructor?
 GameMechs::~GameMechs()
 {
-    // No heap allocations, therefore, not needed.
+    // No heap allocations, therefore no destructor needed
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -61,7 +60,6 @@ int GameMechs::getBoardSizeY() const
 {
     return boardSizeY;
 }
-
 
 void GameMechs::setExitTrue()
 {
