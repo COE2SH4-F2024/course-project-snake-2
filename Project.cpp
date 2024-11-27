@@ -1,4 +1,6 @@
 #include <iostream>
+#include <time.h>
+#include <stdlib.h>
 #include "MacUILib.h"
 #include "objPos.h"
 #include "Player.h"
@@ -39,6 +41,8 @@ void Initialize(void)
 {
     MacUILib_init();
     MacUILib_clearScreen();
+
+    srand(time(NULL));
 
     gamemechs = new GameMechs();
     player = new Player(gamemechs);

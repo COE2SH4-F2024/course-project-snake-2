@@ -15,7 +15,6 @@ Food::~Food()
 
 void Food::generateFood(objPos blockOff)
 {	
-	srand(time(NULL));
 	bool flag = true;
 	while (flag){
 		foodPos.pos->x = rand() % (30 - 2) + 1;
