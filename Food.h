@@ -1,6 +1,6 @@
-#ifndef PLAYER_H
-#define PLAYER_H
-
+#ifndef FOOD_H
+#define FOOD_H
+#include <time.h>
 #include "objPos.h"
 
 class Food

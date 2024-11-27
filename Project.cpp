@@ -65,6 +65,9 @@ void RunLogic(void)
             case 27:
                 gamemechs->setExitTrue();
                 break;
+            case ' ':
+                food->generateFood(player->getPlayerPos()->getHeadElement());
+                break;
             default: // Only attempts to update player movement if exit key is not pressed
                 player->updatePlayerDir();
                 break;
@@ -89,14 +92,17 @@ void DrawScreen(void)
     int rows = gamemechs->getBoardSizeX();
 
     bool snakePart = false;
+    bool foodpart = false;
     char body = '\0';
     objPosArrayList* snake = player->getPlayerPos();
+    objPos foodPos = food->getFoodPos();
 
     for (int i = 0; i < columns; i++)
     {
         for (int j = 0; j < rows; j++)
         {
             snakePart = false;
+            foodpart = false;
 
             for (int k = 0; k < snake->getSize(); k++)
             {
@@ -108,12 +114,15 @@ void DrawScreen(void)
                     body = snakeBody.getSymbol();
                     break;
                 }
+                
             }
 
             if (i == 0 || i == (columns - 1) || j == 0 || j == (rows - 1))
                 MacUILib_printf("%c", '#');
             else if (snakePart)
                 MacUILib_printf("%c", body);
+            else if (foodPos.pos->x == j && foodPos.pos->y == i)
+                MacUILib_printf("%c", foodPos.symbol);
             else
                 MacUILib_printf(" ");      
         }
