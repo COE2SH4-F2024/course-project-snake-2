@@ -3,14 +3,15 @@
 #include "objPos.h"
 #include "Player.h"
 #include "GameMechs.h"
+#include "Food.h"
+
 using namespace std;
 
 #define DELAY_CONST 100000
 
-objPos board;
 GameMechs* gamemechs = nullptr;
 Player* player = nullptr;
-char input;
+Food* food = nullptr;
 
 void Initialize(void);
 void GetInput(void);
@@ -23,7 +24,7 @@ int main(void)
 {
     Initialize();
 
-    while(!gamemechs -> getExitFlagStatus())  
+    while (!gamemechs->getExitFlagStatus())  
     {
         GetInput();
         RunLogic();
@@ -34,83 +35,89 @@ int main(void)
     CleanUp();
 }
 
-
 void Initialize(void)
 {
     MacUILib_init();
     MacUILib_clearScreen();
 
-    board = objPos();
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
+    food = new Food();
 }
 
 void GetInput(void)
 {
-    if (MacUILib_hasChar())
+    if (MacUILib_hasChar()) // Allows for asynchronous logic
     {
-        input = MacUILib_getChar();
-        gamemechs -> setInput(input);
+        char input = MacUILib_getChar();
+        gamemechs->setInput(input);
     }
 }
 
 void RunLogic(void)
 {
-    input = gamemechs -> getInput();
+    char input = gamemechs->getInput();
 
-    if(input != 0)
+    if (input != 0)
     {
         switch(input)
         {
             case 27:
-                gamemechs -> setExitTrue();
+                gamemechs->setExitTrue();
                 break;
-            case 'x':
-                gamemechs -> incrementScore();
-                break;
-            case 'z':
-                gamemechs -> setLoseFlag();
-                gamemechs -> setExitTrue();
-                break;
-            default:
-                player -> updatePlayerDir();
+            default: // Only attempts to update player movement if exit key is not pressed
+                player->updatePlayerDir();
                 break;
         }
     }
-    
-    gamemechs -> clearInput();
 
-    player -> movePlayer();
+    // gamemechs->incrementScore();
+    // gamemechs->setLoseFlag();
+    // gamemechs->setExitTrue();
+
+    gamemechs->clearInput();
+
+    player->movePlayer();    
 }
 
 void DrawScreen(void)
 {
     MacUILib_clearScreen();
 
-    int columns = gamemechs -> getBoardSizeY();
-    int rows = gamemechs -> getBoardSizeX();
-    int playerX = player -> getPlayerPos().pos->x;
-    int playerY = player -> getPlayerPos().pos->y;
-    int playerSym = player -> getPlayerPos().symbol;
+    // Shortcuts
+    int columns = gamemechs->getBoardSizeY();
+    int rows = gamemechs->getBoardSizeX();
+
+    bool snakePart = false;
+    char body = '\0';
+    objPosArrayList* snake = player->getPlayerPos();
 
     for (int i = 0; i < columns; i++)
     {
         for (int j = 0; j < rows; j++)
         {
-            if ((i == 0) || (i == (columns - 1)))
-                board.setObjPos(j, i, '#');
-            else if ((j == 0) || (j == (rows - 1)))
-                board.setObjPos(j, i, '#');
-            else if ((i == playerY) && (j == playerX))
-                board.setObjPos(j, i, playerSym);
-            else
-                board.setObjPos(j, i, ' ');
+            snakePart = false;
 
-            if (j != (rows - 1))
-                MacUILib_printf("%c", board.getSymbol());
+            for (int k = 0; k < snake->getSize(); k++)
+            {
+                objPos snakeBody = snake->getElement(k);
+                
+                if (snakeBody.pos->x == j && snakeBody.pos->y == i)
+                {
+                    snakePart = true;
+                    body = snakeBody.getSymbol();
+                    break;
+                }
+            }
+
+            if (i == 0 || i == (columns - 1) || j == 0 || j == (rows - 1))
+                MacUILib_printf("%c", '#');
+            else if (snakePart)
+                MacUILib_printf("%c", body);
             else
-                MacUILib_printf("%c\n", board.getSymbol());
+                MacUILib_printf(" ");      
         }
+        MacUILib_printf("\n");
     }
 
 }
@@ -130,6 +137,9 @@ void CleanUp(void)
 
     delete gamemechs;
     gamemechs = nullptr;
+
+    delete food;
+    food = nullptr;
 
     MacUILib_uninit();
 }
