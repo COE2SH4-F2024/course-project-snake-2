@@ -1,8 +1,9 @@
 #include "Player.h"
 
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs* thisGMRef, Food* thisFDRef)
 {
     mainGameMechsRef = thisGMRef;
+    mainFoodRef = thisFDRef;
     playerPosList = new objPosArrayList();
 
     playerPosList->insertHead(objPos(15, 7, '*'));

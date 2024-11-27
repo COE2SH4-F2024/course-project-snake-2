@@ -23,8 +23,11 @@ class Player
         objPosArrayList* playerPosList;
         enum Dir myDir;
 
-        // Need a reference to the Main Game Mechanisms
+        // Reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
+
+        // Reference to the Main Food Class
+        Food* mainFoodRef;
 };
 
 #endif
