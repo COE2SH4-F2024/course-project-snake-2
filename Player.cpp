@@ -5,7 +5,7 @@ Player::Player(GameMechs* thisGMRef)
     mainGameMechsRef = thisGMRef;
     playerPosList = new objPosArrayList();
 
-    playerPosList->insertHead(objPos(15, 8, '*'));
+    playerPosList->insertHead(objPos(15, 7, '*'));
     myDir = STOP;
 }
 
@@ -14,7 +14,7 @@ Player::~Player()
     delete playerPosList;
 }
 
-objPosArrayList Player::getPlayerPos() const
+objPosArrayList* Player::getPlayerPos() const
 {
     return playerPosList;
 }
@@ -68,6 +68,9 @@ void Player::movePlayer()
     
     // Storage variables
     int x = 0, y = 0;
+
+    // Movement flag
+    bool move = true;
     
     // Movement implements wrap-around logic
     switch(myDir)
@@ -89,11 +92,16 @@ void Player::movePlayer()
             y = playerY;
             break;
         default:
+            move = false;
             break;
     }
 
-    playerPosList->insertHead(objpos(x, y, '*'));
-    playerPosList->removeTail;
+    // Only start movement if myDir != STOP
+    if (move)
+    {
+        playerPosList->insertHead(objPos(x, y, '*'));
+        playerPosList->removeTail();
+    }
 }
 
 enum dir {UP, DOWN, LEFT, RIGHT, STOP};

@@ -7,7 +7,6 @@ using namespace std;
 
 #define DELAY_CONST 100000
 
-objPos board;
 GameMechs* gamemechs = nullptr;
 Player* player = nullptr;
 
@@ -38,7 +37,6 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    board = objPos();
     gamemechs = new GameMechs();
     player = new Player(gamemechs);
 }
@@ -75,10 +73,10 @@ void RunLogic(void)
                 break;
         }
     }
-    
+
     gamemechs->clearInput();
 
-    player->movePlayer();
+    player->movePlayer();    
 }
 
 void DrawScreen(void)
@@ -88,28 +86,37 @@ void DrawScreen(void)
     // Shortcuts
     int columns = gamemechs->getBoardSizeY();
     int rows = gamemechs->getBoardSizeX();
-    int playerX = player->getPlayerPos().pos->x;
-    int playerY = player->getPlayerPos().pos->y;
-    int playerSym = player->getPlayerPos().symbol;
+
+    bool snakePart = false;
+    char body = '\0';
+    objPosArrayList* snake = player->getPlayerPos();
 
     for (int i = 0; i < columns; i++)
     {
         for (int j = 0; j < rows; j++)
         {
-            if ((i == 0) || (i == (columns - 1)))
-                board.setObjPos(j, i, '#');
-            else if ((j == 0) || (j == (rows - 1)))
-                board.setObjPos(j, i, '#');
-            else if ((i == playerY) && (j == playerX))
-                board.setObjPos(j, i, playerSym);
-            else
-                board.setObjPos(j, i, ' ');
+            snakePart = false;
 
-            if (j != (rows - 1))
-                MacUILib_printf("%c", board.getSymbol());
+            for (int k = 0; k < snake->getSize(); k++)
+            {
+                objPos snakeBody = snake->getElement(k);
+                
+                if (snakeBody.pos->x == j && snakeBody.pos->y == i)
+                {
+                    snakePart = true;
+                    body = snakeBody.getSymbol();
+                    break;
+                }
+            }
+
+            if (i == 0 || i == (columns - 1) || j == 0 || j == (rows - 1))
+                MacUILib_printf("%c", '#');
+            else if (snakePart)
+                MacUILib_printf("%c", body);
             else
-                MacUILib_printf("%c\n", board.getSymbol());
+                MacUILib_printf(" ");      
         }
+        MacUILib_printf("\n");
     }
 
 }
