@@ -22,7 +22,7 @@ int main(void)
 {
     Initialize();
 
-    while (!gamemechs -> getExitFlagStatus())  
+    while (!gamemechs->getExitFlagStatus())  
     {
         GetInput();
         RunLogic();
@@ -48,37 +48,37 @@ void GetInput(void)
     if (MacUILib_hasChar()) // Allows for asynchronous logic
     {
         char input = MacUILib_getChar();
-        gamemechs -> setInput(input);
+        gamemechs->setInput(input);
     }
 }
 
 void RunLogic(void)
 {
-    char input = gamemechs -> getInput();
+    char input = gamemechs->getInput();
 
     if (input != 0)
     {
         switch(input)
         {
             case 27:
-                gamemechs -> setExitTrue();
+                gamemechs->setExitTrue();
                 break;
             case 'x':
-                gamemechs -> incrementScore();
+                gamemechs->incrementScore();
                 break;
             case 'z':
-                gamemechs -> setLoseFlag();
-                gamemechs -> setExitTrue();
+                gamemechs->setLoseFlag();
+                gamemechs->setExitTrue();
                 break;
             default: // Only attempts to update player movement if exit key is not pressed
-                player -> updatePlayerDir();
+                player->updatePlayerDir();
                 break;
         }
     }
     
-    gamemechs -> clearInput();
+    gamemechs->clearInput();
 
-    player -> movePlayer();
+    player->movePlayer();
 }
 
 void DrawScreen(void)
@@ -86,11 +86,11 @@ void DrawScreen(void)
     MacUILib_clearScreen();
 
     // Shortcuts
-    int columns = gamemechs -> getBoardSizeY();
-    int rows = gamemechs -> getBoardSizeX();
-    int playerX = player -> getPlayerPos().pos->x;
-    int playerY = player -> getPlayerPos().pos->y;
-    int playerSym = player -> getPlayerPos().symbol;
+    int columns = gamemechs->getBoardSizeY();
+    int rows = gamemechs->getBoardSizeX();
+    int playerX = player->getPlayerPos().pos->x;
+    int playerY = player->getPlayerPos().pos->y;
+    int playerSym = player->getPlayerPos().symbol;
 
     for (int i = 0; i < columns; i++)
     {
