@@ -61,18 +61,15 @@ void RunLogic(void)
             case 27:
                 gamemechs->setExitTrue();
                 break;
-            case 'x':
-                gamemechs->incrementScore();
-                break;
-            case 'z':
-                gamemechs->setLoseFlag();
-                gamemechs->setExitTrue();
-                break;
             default: // Only attempts to update player movement if exit key is not pressed
                 player->updatePlayerDir();
                 break;
         }
     }
+
+    // gamemechs->incrementScore();
+    // gamemechs->setLoseFlag();
+    // gamemechs->setExitTrue();
 
     gamemechs->clearInput();
 

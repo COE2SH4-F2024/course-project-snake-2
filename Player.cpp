@@ -24,37 +24,34 @@ void Player::updatePlayerDir()
     char input = mainGameMechsRef->getInput();
 
     // Allows 90° turns, but not 180°
-    if (input)
+    switch(input)
     {
-        switch(input)
-        {
-            case 'w':
-                if (myDir != DOWN)
-                {
-                    myDir = UP;
-                }
-                break;
-            case 's':
-                if (myDir != UP)
-                {
-                    myDir = DOWN;
-                }
-                break;
-            case 'd':
-                if (myDir != LEFT)
-                {
-                    myDir = RIGHT;
-                }
-                break;
-            case 'a':
-                if (myDir != RIGHT)
-                {
-                    myDir = LEFT;
-                }
-                break;
-            default:
-                break;
-        }
+        case 'w':
+            if (myDir != DOWN)
+            {
+                myDir = UP;
+            }
+            break;
+        case 's':
+            if (myDir != UP)
+            {
+                myDir = DOWN;
+            }
+            break;
+        case 'd':
+            if (myDir != LEFT)
+            {
+                myDir = RIGHT;
+            }
+            break;
+        case 'a':
+            if (myDir != RIGHT)
+            {
+            myDir = LEFT;
+            }
+            break;
+        default:
+            break;
     }
 }
 
