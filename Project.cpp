@@ -157,7 +157,7 @@ void LoopDelay(void)
     if (!gamemechs->getLoseFlagStatus())
         MacUILib_Delay(DELAY_CONST); // 0.1s delay
     else
-        MacUILib_Delay(LOSE_DELAY_CONST);
+        MacUILib_Delay(LOSE_DELAY_CONST); // 2s delay
 }
 
 
