@@ -63,6 +63,8 @@ void Player::movePlayer()
     int yMax = mainGameMechsRef->getBoardSizeY();
     int playerX = playerPosList->getHeadElement().pos->x;
     int playerY = playerPosList->getHeadElement().pos->y;
+    int foodX = mainFoodRef->getFoodPos().pos->x;
+    int foodY = mainFoodRef->getFoodPos().pos->y;
     
     // Storage variables
     int x = 0, y = 0;
@@ -98,7 +100,14 @@ void Player::movePlayer()
     if (move)
     {
         playerPosList->insertHead(objPos(x, y, '*'));
-        playerPosList->removeTail();
+
+        if (playerX == foodX && playerY == foodY)
+        {
+            mainFoodRef->generateFood(playerPosList);
+            mainGameMechsRef->incrementScore();
+        }
+        else
+            playerPosList->removeTail();
     }
 }
 

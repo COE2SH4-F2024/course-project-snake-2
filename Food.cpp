@@ -11,7 +11,7 @@ Food::~Food()
 	// Not needed
 }
 
-void Food::generateFood(objPos blockOff)
+void Food::generateFood(objPosArrayList* blockOff)
 {	
 	bool flag = true;
 
@@ -20,10 +20,15 @@ void Food::generateFood(objPos blockOff)
 		foodPos.pos->x = rand() % (30 - 2) + 1;
 		foodPos.pos->y = rand() % (15 - 2) + 1;
 
-		if (blockOff.pos->x == foodPos.pos->x && blockOff.pos->y == foodPos.pos->y)
-			break;
-		else
-			flag = false;
+		for (int i = 0; i < blockOff->getSize(); i++)
+		{
+			objPos bodyPart = blockOff->getElement(i);
+
+			if (bodyPart.pos->x == foodPos.pos->x && bodyPart.pos->y == foodPos.pos->y)
+				break;
+			else
+				flag = false;
+		}
 	}
 }
 

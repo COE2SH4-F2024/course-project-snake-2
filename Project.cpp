@@ -45,8 +45,8 @@ void Initialize(void)
     srand(time(NULL));
 
     gamemechs = new GameMechs();
-    player = new Player(gamemechs);
     food = new Food();
+    player = new Player(gamemechs, food);
 }
 
 void GetInput(void)
@@ -69,16 +69,12 @@ void RunLogic(void)
             case 27:
                 gamemechs->setExitTrue();
                 break;
-            case ' ':
-                food->generateFood(player->getPlayerPos()->getHeadElement());
-                break;
             default: // Only attempts to update player movement if exit key is not pressed
                 player->updatePlayerDir();
                 break;
         }
     }
 
-    // gamemechs->incrementScore();
     // gamemechs->setLoseFlag();
     // gamemechs->setExitTrue();
 
@@ -101,6 +97,8 @@ void DrawScreen(void)
 
     bool foodpart = false;
     objPos foodPos = food->getFoodPos();
+
+    MacUILib_printf("%d\n", gamemechs->getScore());
 
     for (int i = 0; i < columns; i++)
     {
