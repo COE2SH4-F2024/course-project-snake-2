@@ -10,6 +10,7 @@
 using namespace std;
 
 #define DELAY_CONST 100000
+#define LOSE_DELAY_CONST 2000000
 
 GameMechs* gamemechs = nullptr;
 Player* player = nullptr;
@@ -45,8 +46,10 @@ void Initialize(void)
     srand(time(NULL));
 
     gamemechs = new GameMechs();
-    food = new Food();
+    food = new Food(gamemechs);
     player = new Player(gamemechs, food);
+
+    food->generateFood(player->getPlayerPos());
 }
 
 void GetInput(void)
@@ -75,12 +78,16 @@ void RunLogic(void)
         }
     }
 
-    // gamemechs->setLoseFlag();
-    // gamemechs->setExitTrue();
-
     gamemechs->clearInput();
 
-    player->movePlayer();    
+    // Player loses if snake size is 0 or self-collision
+    if (player->getPlayerPos()->getSize() <= 0)
+    {
+        gamemechs->setLoseFlag();
+        gamemechs->setExitTrue();
+    }
+    else
+        player->movePlayer();
 }
 
 void DrawScreen(void)
@@ -91,51 +98,66 @@ void DrawScreen(void)
     int columns = gamemechs->getBoardSizeY();
     int rows = gamemechs->getBoardSizeX();
 
-    bool snakePart = false;
+    bool objItem = false;
     char body = '\0';
     objPosArrayList* snake = player->getPlayerPos();
+    objPosArrayList* foodPos = food->getFoodPos();
 
-    bool foodpart = false;
-    objPos foodPos = food->getFoodPos();
-
-    MacUILib_printf("%d\n", gamemechs->getScore());
-
-    for (int i = 0; i < columns; i++)
+    if (!gamemechs->getLoseFlagStatus())
     {
-        for (int j = 0; j < rows; j++)
+        MacUILib_printf("%d\n", gamemechs->getScore());
+
+        for (int i = 0; i < columns; i++)
         {
-            snakePart = false;
-            foodpart = false;
-
-            for (int k = 0; k < snake->getSize(); k++)
+            for (int j = 0; j < rows; j++)
             {
-                objPos snakeBody = snake->getElement(k);
-                
-                if (snakeBody.pos->x == j && snakeBody.pos->y == i)
-                {
-                    snakePart = true;
-                    body = snakeBody.getSymbol();
-                    break;
-                } 
-            }
+                objItem = false;
 
-            if (i == 0 || i == (columns - 1) || j == 0 || j == (rows - 1))
-                MacUILib_printf("%c", '#');
-            else if (snakePart)
-                MacUILib_printf("%c", body);
-            else if (foodPos.pos->x == j && foodPos.pos->y == i)
-                MacUILib_printf("%c", foodPos.symbol);
-            else
-                MacUILib_printf(" ");      
+                for (int k = 0; k < snake->getSize(); k++)
+                {
+                    objPos snakeBody = snake->getElement(k);
+                    
+                    if (snakeBody.pos->x == j && snakeBody.pos->y == i)
+                    {
+                        objItem = true;
+                        body = snakeBody.getSymbol();
+                        break;
+                    } 
+                }
+
+                for (int k = 0; k < foodPos->getSize(); k++)
+                {
+                    objPos singleFood = foodPos->getElement(k);
+
+                    if (singleFood.pos->x == j && singleFood.pos->y == i)
+                    {
+                        objItem = true;
+                        body = singleFood.getSymbol();
+                        break;
+                    }
+                }
+
+                if (i == 0 || i == (columns - 1) || j == 0 || j == (rows - 1))
+                    MacUILib_printf("%c", '#');
+                else if (objItem)
+                    MacUILib_printf("%c", body);
+                else
+                    MacUILib_printf(" ");      
+            }
+            MacUILib_printf("\n");
         }
-        MacUILib_printf("\n");
     }
+    else
+        MacUILib_printf("Game Over!\nYour Final Score was %d", gamemechs->getScore());
 
 }
 
 void LoopDelay(void)
 {
-    MacUILib_Delay(DELAY_CONST); // 0.1s delay
+    if (!gamemechs->getLoseFlagStatus())
+        MacUILib_Delay(DELAY_CONST); // 0.1s delay
+    else
+        MacUILib_Delay(LOSE_DELAY_CONST);
 }
 
 

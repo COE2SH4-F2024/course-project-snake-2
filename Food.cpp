@@ -1,38 +1,61 @@
 #include "Food.h"
 
-Food::Food()
+Food::Food(GameMechs* thisGMRef)
 {
-	foodPos = objPos(6, 8, '@');
-	// foodPos.symbol = '@';
+	mainGameMechsRef = thisGMRef;
+	foodBucket = new objPosArrayList();
 }
 
 Food::~Food()
 {
-	// Not needed
+	delete foodBucket;
 }
 
 void Food::generateFood(objPosArrayList* blockOff)
 {	
-	bool flag = true;
+	int i = 0, j = 0, x = 0, y = 0;
 
-	while (flag)
+	// Board size for item generation
+	int xSize = mainGameMechsRef->getBoardSizeX() - 2;
+	int ySize = mainGameMechsRef->getBoardSizeY() - 2;
+
+	// Delete previous items
+	for (j = foodBucket->getSize(); j > 0; j--)
+		foodBucket->removeTail(); 
+
+	while (i < 3)
 	{
-		foodPos.pos->x = rand() % (30 - 2) + 1;
-		foodPos.pos->y = rand() % (15 - 2) + 1;
+		x = rand() % xSize + 1;
+		y = rand() % ySize + 1;
 
-		for (int i = 0; i < blockOff->getSize(); i++)
+		// Checks if generated inside snake object
+		for (j = 0; j < blockOff->getSize(); j++)
 		{
-			objPos bodyPart = blockOff->getElement(i);
+			objPos bodyPart = blockOff->getElement(j);
 
-			if (bodyPart.pos->x == foodPos.pos->x && bodyPart.pos->y == foodPos.pos->y)
+			if (bodyPart.pos->x == x && bodyPart.pos->y == y)
 				break;
-			else
-				flag = false;
 		}
+
+		// Checks if generated inside other food object
+		for (j = 0; j < i; j++)
+		{
+			objPos foodPos = foodBucket->getElement(j);
+
+			if (foodPos.pos->x == x && foodPos.pos->y)
+				break;
+		}
+
+		if (i < 2)
+			foodBucket->insertTail(objPos(x, y, '@'));
+		else
+			foodBucket->insertTail(objPos(x, y, '!'));
+
+		i++;
 	}
 }
 
-objPos Food::getFoodPos() const
+objPosArrayList* Food::getFoodPos() const
 {
-	return foodPos;
+	return foodBucket;
 }

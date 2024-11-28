@@ -35,10 +35,14 @@ bool GameMechs::getLoseFlagStatus() const
     return loseFlag;
 }
     
-
 char GameMechs::getInput() const
 {
     return input;
+}
+
+void GameMechs::setScore(int newScore)
+{
+    score = newScore;
 }
 
 int GameMechs::getScore() const
@@ -49,6 +53,11 @@ int GameMechs::getScore() const
 void GameMechs::incrementScore()
 {
     score++;
+}
+
+void GameMechs::decrementScore()
+{
+    score--;
 }
 
 int GameMechs::getBoardSizeX() const
@@ -80,5 +89,3 @@ void GameMechs::clearInput()
 {
     input = '\0';
 }
-
-// More methods should be added here

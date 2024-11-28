@@ -63,8 +63,6 @@ void Player::movePlayer()
     int yMax = mainGameMechsRef->getBoardSizeY();
     int playerX = playerPosList->getHeadElement().pos->x;
     int playerY = playerPosList->getHeadElement().pos->y;
-    int foodX = mainFoodRef->getFoodPos().pos->x;
-    int foodY = mainFoodRef->getFoodPos().pos->y;
     
     // Storage variables
     int x = 0, y = 0;
@@ -99,15 +97,38 @@ void Player::movePlayer()
     // Only start movement if myDir != STOP
     if (move)
     {
-        playerPosList->insertHead(objPos(x, y, '*'));
-
-        if (playerX == foodX && playerY == foodY)
+        // Check for collision with food
+        for (int i = 0; i < mainFoodRef->getFoodPos()->getSize(); i++)
         {
-            mainFoodRef->generateFood(playerPosList);
-            mainGameMechsRef->incrementScore();
+            objPos singleFood = mainFoodRef->getFoodPos()->getElement(i);
+            int foodX = singleFood.pos->x;
+            int foodY = singleFood.pos->y;
+            char foodSym = singleFood.getSymbol();
+
+            if (playerX == foodX && playerY == foodY)
+            {
+                mainFoodRef->generateFood(playerPosList);
+
+                // Increases size and score by 1
+                if (foodSym == '@')
+                    playerPosList->insertHead(objPos(x, y, '*'));
+                // Decreases size and score by 1
+                else if (foodSym == '!')
+                    playerPosList->removeTail();
+
+                int playerSize = playerPosList->getSize();
+
+                // Update score
+                if (playerSize > 0)
+                    mainGameMechsRef->setScore(playerSize - 1);
+                else
+                    mainGameMechsRef->setScore(0);
+                break;
+            }
         }
-        else
-            playerPosList->removeTail();
+        
+        playerPosList->insertHead(objPos(x, y, '*'));
+        playerPosList->removeTail();
     }
 }
 
