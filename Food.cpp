@@ -46,6 +46,7 @@ void Food::generateFood(objPosArrayList* blockOff)
 				break;
 		}
 
+		// Generate 2 different types of food objects
 		if (i < 2)
 			foodBucket->insertTail(objPos(x, y, '@'));
 		else

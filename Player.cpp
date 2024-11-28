@@ -28,6 +28,24 @@ bool Player::checkSelfCollision()
 {
     bool collide = false;
 
+    // Store head properties
+    objPos head = playerPosList->getHeadElement();
+    int headX = head.pos->x;
+    int headY = head.pos->y;
+
+    for (int i = 1; i < playerPosList->getSize(); i++)
+    {
+        objPos body = playerPosList->getElement(i);
+        int bodyX = body.pos->x;
+        int bodyY = body.pos->y;
+
+        if (headX == bodyX && headY == bodyY)
+        {
+            collide = true;
+            break;
+        }
+    }
+
     return collide;
 }
 
@@ -81,8 +99,8 @@ void Player::movePlayer()
     // Movement flag
     bool move = true;
 
-    // Collision flag
-    bool collide = false;
+    // Food collision flag
+    bool ate = false;
     
     // Movement implements wrap-around logic
     switch(myDir)
@@ -136,12 +154,13 @@ void Player::movePlayer()
                 else
                     mainGameMechsRef->setScore(0);
 
-                collide = true;
+                ate = true;
                 break;
             }
         }
         
-        if (!collide)
+        // Movement if no interaction with food object
+        if (!ate)
         {
             playerPosList->insertHead(objPos(x, y, '*'));
             playerPosList->removeTail();
