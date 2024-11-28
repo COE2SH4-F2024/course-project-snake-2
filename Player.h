@@ -18,7 +18,7 @@ class Player
         void updatePlayerDir();
         void movePlayer();
 
-        // More methods to be added here
+        bool checkSelfCollision();
 
     private:
         objPosArrayList* playerPosList;

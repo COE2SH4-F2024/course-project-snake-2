@@ -1,4 +1,8 @@
 #include "Player.h"
+#include <iostream>
+#include "MacUILib.h"
+
+using namespace std;
 
 Player::Player(GameMechs* thisGMRef, Food* thisFDRef)
 {
@@ -18,6 +22,13 @@ Player::~Player()
 objPosArrayList* Player::getPlayerPos() const
 {
     return playerPosList;
+}
+
+bool Player::checkSelfCollision()
+{
+    bool collide = false;
+
+    return collide;
 }
 
 void Player::updatePlayerDir()
@@ -69,6 +80,9 @@ void Player::movePlayer()
 
     // Movement flag
     bool move = true;
+
+    // Collision flag
+    bool collide = false;
     
     // Movement implements wrap-around logic
     switch(myDir)
@@ -109,11 +123,9 @@ void Player::movePlayer()
             {
                 mainFoodRef->generateFood(playerPosList);
 
-                // Increases size and score by 1
-                if (foodSym == '@')
+                if (foodSym == '@') // Increases size and score by 1
                     playerPosList->insertHead(objPos(x, y, '*'));
-                // Decreases size and score by 1
-                else if (foodSym == '!')
+                else if (foodSym == '!') // Decreases size and score by 1
                     playerPosList->removeTail();
 
                 int playerSize = playerPosList->getSize();
@@ -123,12 +135,23 @@ void Player::movePlayer()
                     mainGameMechsRef->setScore(playerSize - 1);
                 else
                     mainGameMechsRef->setScore(0);
+
+                collide = true;
                 break;
             }
         }
         
-        playerPosList->insertHead(objPos(x, y, '*'));
-        playerPosList->removeTail();
+        if (!collide)
+        {
+            playerPosList->insertHead(objPos(x, y, '*'));
+            playerPosList->removeTail();
+        }
+
+        if (checkSelfCollision())
+        {
+            mainGameMechsRef->setExitTrue();
+            mainGameMechsRef->setLoseFlag();
+        }
     }
 }
 
